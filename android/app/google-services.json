@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "730849141936",
+    "project_id": "rol-chal",
+    "storage_bucket": "rol-chal.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:730849141936:android:6927b8d7646ecad22a4775",
+        "android_client_info": {
+          "package_name": "com.example.challenge_final_project"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDZUjtUQe_FXsUIG0mLw8KCP4v03CEa_Vw"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
