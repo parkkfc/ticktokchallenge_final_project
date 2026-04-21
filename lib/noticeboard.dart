@@ -1,10 +1,12 @@
 import 'package:challenge_final_project/repository/authrepo.dart';
 import 'package:challenge_final_project/repository/postrepo.dart';
+import 'package:challenge_final_project/viewmodel/editpostviewmodel.dart';
 import 'package:challenge_final_project/widget/appsize.dart';
 import 'package:challenge_final_project/widget/appts.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:go_router/go_router.dart';
 import 'package:timeago/timeago.dart' as timeago;
 
 class NoticeBoardScreen extends ConsumerStatefulWidget {
@@ -30,6 +32,85 @@ class _NoticeBoardScreenState extends ConsumerState<NoticeBoardScreen> {
 
     // 3. 상대적 시간으로 변환 ('ko'를 지정해야 한국어로 나옵니다)
     return timeago.format(date, locale: 'ko');
+  }
+
+  void showbottomSheet(String docId) {
+    showModalBottomSheet(
+      backgroundColor: Colors.transparent,
+      showDragHandle: true,
+      context: context,
+      builder: (context) {
+        return Padding(
+          padding: EdgeInsets.all(16),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Container(
+                padding: EdgeInsets.all(15),
+                width: MediaQuery.of(context).size.width,
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(15),
+                ),
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Text(
+                      "Delete note",
+                      style: TextStyle(fontWeight: FontWeight.bold),
+                    ),
+                    AppSize.h12,
+                    Text("Areyou sure you want to do this?"),
+                    AppSize.h12,
+                    Divider(height: 2),
+                    AppSize.h12,
+                    GestureDetector(
+                      onTap: () async {
+                        await ref
+                            .read(editpostViewModelProvider.notifier)
+                            .deletePost(docId);
+
+                        context.pop();
+                      },
+                      child: Text(
+                        "Delete",
+                        style: TextStyle(
+                          fontSize: AppTS.s24MainTitle,
+                          color: Colors.red,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              AppSize.h16,
+              Container(
+                width: MediaQuery.of(context).size.width,
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(15),
+                ),
+                height: 80,
+                child: Center(
+                  child: GestureDetector(
+                    onTap: () => context.pop(),
+                    child: Text(
+                      "Cancel",
+                      style: TextStyle(
+                        fontSize: AppTS.s24MainTitle,
+                        color: Colors.blue,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+            ],
+          ),
+        );
+      },
+    );
   }
 
   @override
@@ -86,56 +167,65 @@ class _NoticeBoardScreenState extends ConsumerState<NoticeBoardScreen> {
                   final String day = formatTimestamp(post["createdAt"]);
                   return Padding(
                     padding: EdgeInsets.symmetric(horizontal: 30),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Container(
-                          padding: EdgeInsets.symmetric(horizontal: 30),
-                          constraints: BoxConstraints(minHeight: 50),
-                          decoration: BoxDecoration(
-                            border: Border(
-                              bottom: BorderSide(color: Colors.black, width: 5),
-                              top: BorderSide(color: Colors.black, width: 2),
-                              left: BorderSide(color: Colors.black, width: 2),
-                              right: BorderSide(color: Colors.black, width: 3),
-                            ),
-                            color: Color(0xFF74BDA8),
-                            borderRadius: BorderRadius.circular(15),
-                          ),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Row(
-                                children: [
-                                  Text(
-                                    "Mood: ",
-                                    style: TextStyle(
-                                      fontWeight: FontWeight.bold,
-                                      fontSize: AppTS.s18SubTitle,
-                                    ),
-                                  ),
-                                  Text(
-                                    post["mood"],
-                                    style: TextStyle(
-                                      fontWeight: FontWeight.bold,
-                                      fontSize: AppTS.s18SubTitle,
-                                    ),
-                                  ),
-                                ],
-                              ),
-                              Text(
-                                post["content"],
-                                style: TextStyle(
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: AppTS.s18SubTitle,
+                    child: GestureDetector(
+                      onLongPress: () => showbottomSheet(post["docId"]),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Container(
+                            padding: EdgeInsets.symmetric(horizontal: 30),
+                            constraints: BoxConstraints(minHeight: 50),
+                            decoration: BoxDecoration(
+                              border: Border(
+                                bottom: BorderSide(
+                                  color: Colors.black,
+                                  width: 5,
+                                ),
+                                top: BorderSide(color: Colors.black, width: 2),
+                                left: BorderSide(color: Colors.black, width: 2),
+                                right: BorderSide(
+                                  color: Colors.black,
+                                  width: 3,
                                 ),
                               ),
-                            ],
+                              color: Color(0xFF74BDA8),
+                              borderRadius: BorderRadius.circular(15),
+                            ),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Row(
+                                  children: [
+                                    Text(
+                                      "Mood: ",
+                                      style: TextStyle(
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: AppTS.s18SubTitle,
+                                      ),
+                                    ),
+                                    Text(
+                                      post["mood"],
+                                      style: TextStyle(
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: AppTS.s18SubTitle,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                                Text(
+                                  post["content"],
+                                  style: TextStyle(
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: AppTS.s18SubTitle,
+                                  ),
+                                ),
+                              ],
+                            ),
                           ),
-                        ),
-                        AppSize.h12,
-                        Text(day, style: TextStyle(color: Colors.grey[600])),
-                      ],
+                          AppSize.h12,
+                          Text(day, style: TextStyle(color: Colors.grey[600])),
+                        ],
+                      ),
                     ),
                   );
                 },

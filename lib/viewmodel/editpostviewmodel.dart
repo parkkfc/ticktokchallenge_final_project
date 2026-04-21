@@ -28,6 +28,13 @@ class EditPostViewModel extends AsyncNotifier<void> {
       await ref.read(postRepoProvider).uploadPost(post.toJson());
     });
   }
+
+  Future<void> deletePost(String docId) async {
+    state = AsyncValue.loading();
+    state = await AsyncValue.guard(() async {
+      await ref.read(postRepoProvider).deletePost(docId);
+    });
+  }
 }
 
 final editpostViewModelProvider =

@@ -26,6 +26,10 @@ class PostRepo {
         .snapshots()
         .map((snapshot) => snapshot.docs.map((doc) => doc.data()).toList());
   }
+
+  Future<void> deletePost(String docId) async {
+    await _db.collection("posts").doc(docId).delete();
+  }
 }
 
 final postRepoProvider = Provider((ref) => PostRepo());
