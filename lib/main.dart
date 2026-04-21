@@ -20,6 +20,14 @@ class MyApp extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final router = ref.watch(routerProvider);
-    return MaterialApp.router(routerConfig: router);
+    return MaterialApp.router(
+      routerConfig: router,
+
+      theme: ThemeData(
+        scaffoldBackgroundColor: Color(0xFFECE6C2),
+        appBarTheme: AppBarThemeData(backgroundColor: Color(0xFFECE6C2)),
+        bottomAppBarTheme: BottomAppBarThemeData(color: Color(0xFFECE6C2)),
+      ),
+    );
   }
 }

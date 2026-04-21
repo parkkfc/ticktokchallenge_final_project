@@ -1,6 +1,6 @@
 import 'package:challenge_final_project/authscreen/loginscreen.dart';
 import 'package:challenge_final_project/authscreen/signupscreen.dart';
-import 'package:challenge_final_project/authscreen/userinfoscreen.dart';
+import 'package:challenge_final_project/authscreen/homescreen.dart';
 import 'package:challenge_final_project/mainpage.dart';
 import 'package:challenge_final_project/repository/authrepo.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -10,7 +10,7 @@ final routerProvider = Provider((ref) {
   final authState = ref.watch(authStreamProvider);
 
   return GoRouter(
-    initialLocation: "/",
+    initialLocation: HomeScreen.homescreenPath,
     redirect: (context, state) {
       final user = authState.value;
       final isLoggingIn =
@@ -20,7 +20,7 @@ final routerProvider = Provider((ref) {
         return isLoggingIn ? null : "/";
       }
       if (isLoggingIn) {
-        return HomepageScreen.homepagescreenPath;
+        return HomeScreen.homescreenPath;
       }
       return null;
     },
@@ -32,13 +32,7 @@ final routerProvider = Provider((ref) {
           return LoginScreen();
         },
       ),
-      GoRoute(
-        path: HomepageScreen.homepagescreenPath,
-        name: HomepageScreen.homepagescreenName,
-        builder: (context, state) {
-          return HomepageScreen();
-        },
-      ),
+
       GoRoute(
         path: SignupScreen.signupscreenPath,
         name: SignupScreen.signupscreenName,
@@ -47,10 +41,10 @@ final routerProvider = Provider((ref) {
         },
       ),
       GoRoute(
-        path: UserInfoScreen.userinfoPath,
-        name: UserInfoScreen.userinfoName,
+        path: HomeScreen.homescreenPath,
+        name: HomeScreen.homescreenName,
         builder: (context, state) {
-          return UserInfoScreen();
+          return HomeScreen();
         },
       ),
     ],

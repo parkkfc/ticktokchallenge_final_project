@@ -20,6 +20,17 @@ class AuthRepository {
       password: userInfo["password"],
     );
   }
+
+  Future<void> signInRepo(Map<String, dynamic> userInfo) async {
+    await _auth.signInWithEmailAndPassword(
+      email: userInfo["email"],
+      password: userInfo["password"],
+    );
+  }
+
+  Future<void> signOut() async {
+    await _auth.signOut();
+  }
 }
 
 // Riverpod의 Provider들은 보통 이렇게 클래스 밖에 '전역'으로 선언합니다.
